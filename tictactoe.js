@@ -12,48 +12,39 @@ const ask = questionText => {
   });
 };
 
-let values = {
-  row1col1: 1,
-  row1col2: 2,
-  row1col3: 3,
-  row2col1: 4,
-  row2col2: 5,
-  row2col3: 6,
-  row3col1: 7,
-  row3col2: 8,
-  row3col3: 9
-};
+let values = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 let currentPlayer = "X";
+let winner = "";
 
 const grid = gridValues => {
   return (
     "\n" +
     " " +
-    gridValues.row1col1 +
+    gridValues[1] +
     " | " +
-    gridValues.row1col2 +
+    gridValues[2] +
     " | " +
-    gridValues.row1col3 +
+    gridValues[3] +
     "\n--- --- ---\n" +
     " " +
-    gridValues.row2col1 +
+    gridValues[4] +
     " | " +
-    gridValues.row2col2 +
+    gridValues[5] +
     " | " +
-    gridValues.row2col3 +
+    gridValues[6] +
     "\n--- --- ---\n" +
     " " +
-    gridValues.row3col1 +
+    gridValues[7] +
     " | " +
-    gridValues.row3col2 +
+    gridValues[8] +
     " | " +
-    gridValues.row3col3 +
+    gridValues[9] +
     "\n\n" +
     "Player " +
     currentPlayer +
     "'s turn\n" +
-    "Move to?"
+    "Move to?\n"
   );
 };
 
@@ -61,37 +52,95 @@ start();
 
 async function start() {
   let prompt = "start";
+  let spotTaken = false;
 
   while (prompt.toLowerCase() !== "exit") {
-    prompt = await ask(grid(values));
-
-    if (prompt === "1") {
-      values.row1col1 = currentPlayer;
-    } else if (prompt === "2") {
-      values.row1col2 = currentPlayer;
-    } else if (prompt === "3") {
-      values.row1col3 = currentPlayer;
-    } else if (prompt === "4") {
-      values.row2col1 = currentPlayer;
-    } else if (prompt === "5") {
-      values.row2col2 = currentPlayer;
-    } else if (prompt === "6") {
-      values.row2col3 = currentPlayer;
-    } else if (prompt === "7") {
-      values.row3col1 = currentPlayer;
-    } else if (prompt === "8") {
-      values.row3col2 = currentPlayer;
-    } else if (prompt === "9") {
-      values.row3col3 = currentPlayer;
+    if (spotTaken) {
+      prompt = await ask(
+        "\nSorry spot is already taken, try again!! \n\n" + grid(values)
+      );
+    } else {
+      prompt = await ask(grid(values));
     }
 
-    if (currentPlayer === "X") {
-      currentPlayer = "O";
+    spotTaken = false;
+    if (prompt === "1" && values[1] === 1) {
+      values[1] = currentPlayer;
+    } else if (prompt === "2" && values[2] === 2) {
+      values[2] = currentPlayer;
+    } else if (prompt === "3" && values[3] === 3) {
+      values[3] = currentPlayer;
+    } else if (prompt === "4" && values[4] === 4) {
+      values[4] = currentPlayer;
+    } else if (prompt === "5" && values[5] === 5) {
+      values[5] = currentPlayer;
+    } else if (prompt === "6" && values[6] === 6) {
+      values[6] = currentPlayer;
+    } else if (prompt === "7" && values[7] === 7) {
+      values[7] = currentPlayer;
+    } else if (prompt === "8" && values[8] === 8) {
+      values[8] = currentPlayer;
+    } else if (prompt === "9" && values[9] === 9) {
+      values[9] = currentPlayer;
     } else {
-      currentPlayer = "X";
+      spotTaken = true;
+    }
+
+    if (
+      (values[1] === "X" && values[2] === "X" && values[3] === "X") ||
+      (values[4] === "X" && values[5] === "X" && values[6] === "X") ||
+      (values[7] === "X" && values[8] === "X" && values[9] === "X") ||
+      (values[1] === "X" && values[4] === "X" && values[7] === "X") ||
+      (values[2] === "X" && values[5] === "X" && values[8] === "X") ||
+      (values[3] === "X" && values[6] === "X" && values[9] === "X") ||
+      (values[1] === "X" && values[5] === "X" && values[9] === "X") ||
+      (values[3] === "X" && values[5] === "X" && values[7] === "X")
+    ) {
+      winner = "X";
+      prompt = "exit";
+    } else if (
+      (values[1] === "O" && values[2] === "O" && values[3] === "O") ||
+      (values[4] === "O" && values[5] === "O" && values[6] === "O") ||
+      (values[7] === "O" && values[8] === "O" && values[9] === "O") ||
+      (values[1] === "O" && values[4] === "O" && values[7] === "O") ||
+      (values[2] === "O" && values[5] === "O" && values[8] === "O") ||
+      (values[3] === "O" && values[6] === "O" && values[9] === "O") ||
+      (values[1] === "O" && values[5] === "O" && values[9] === "O") ||
+      (values[3] === "O" && values[5] === "O" && values[7] === "O")
+    ) {
+      winner = "O";
+      prompt = "exit";
+    } else if (
+      values[1] !== 1 &&
+      values[2] !== 2 &&
+      values[3] !== 3 &&
+      values[4] !== 4 &&
+      values[5] !== 5 &&
+      values[6] !== 6 &&
+      values[7] !== 7 &&
+      values[8] !== 8 &&
+      values[9] !== 9
+    ) {
+      winner = "";
+      prompt = "exit";
+    }
+
+    if (!spotTaken) {
+      if (currentPlayer === "X") {
+        currentPlayer = "O";
+      } else {
+        currentPlayer = "X";
+      }
     }
   }
 
-  console.log("Thanks for playing!");
+  if (winner === "X") {
+    console.log("X Wins!!!");
+  } else if (winner === "O") {
+    console.log("O Wins!!!");
+  } else {
+    console.log("No Winner!!!");
+  }
+
   process.exit();
 }
