@@ -48,6 +48,22 @@ const grid = gridValues => {
   );
 };
 
+const checkWinner = player => {
+  if (
+    (values[1] === player && values[2] === player && values[3] === player) ||
+    (values[4] === player && values[5] === player && values[6] === player) ||
+    (values[7] === player && values[8] === player && values[9] === player) ||
+    (values[1] === player && values[4] === player && values[7] === player) ||
+    (values[2] === player && values[5] === player && values[8] === player) ||
+    (values[3] === player && values[6] === player && values[9] === player) ||
+    (values[1] === player && values[5] === player && values[9] === player) ||
+    (values[3] === player && values[5] === player && values[7] === player)
+  ) {
+    return true;
+  }
+  return false;
+};
+
 start();
 
 async function start() {
@@ -86,28 +102,10 @@ async function start() {
       spotTaken = true;
     }
 
-    if (
-      (values[1] === "X" && values[2] === "X" && values[3] === "X") ||
-      (values[4] === "X" && values[5] === "X" && values[6] === "X") ||
-      (values[7] === "X" && values[8] === "X" && values[9] === "X") ||
-      (values[1] === "X" && values[4] === "X" && values[7] === "X") ||
-      (values[2] === "X" && values[5] === "X" && values[8] === "X") ||
-      (values[3] === "X" && values[6] === "X" && values[9] === "X") ||
-      (values[1] === "X" && values[5] === "X" && values[9] === "X") ||
-      (values[3] === "X" && values[5] === "X" && values[7] === "X")
-    ) {
+    if (checkWinner("X")) {
       winner = "X";
       prompt = "exit";
-    } else if (
-      (values[1] === "O" && values[2] === "O" && values[3] === "O") ||
-      (values[4] === "O" && values[5] === "O" && values[6] === "O") ||
-      (values[7] === "O" && values[8] === "O" && values[9] === "O") ||
-      (values[1] === "O" && values[4] === "O" && values[7] === "O") ||
-      (values[2] === "O" && values[5] === "O" && values[8] === "O") ||
-      (values[3] === "O" && values[6] === "O" && values[9] === "O") ||
-      (values[1] === "O" && values[5] === "O" && values[9] === "O") ||
-      (values[3] === "O" && values[5] === "O" && values[7] === "O")
-    ) {
+    } else if (checkWinner("O")) {
       winner = "O";
       prompt = "exit";
     } else if (
@@ -135,11 +133,11 @@ async function start() {
   }
 
   if (winner === "X") {
-    console.log("X Wins!!!");
+    console.log(grid(values) + "\nX Wins!!!");
   } else if (winner === "O") {
-    console.log("O Wins!!!");
+    console.log(grid(values) + "\nO Wins!!!");
   } else {
-    console.log("No Winner!!!");
+    console.log(grid(values) + "\nNo Winner!!!");
   }
 
   process.exit();
