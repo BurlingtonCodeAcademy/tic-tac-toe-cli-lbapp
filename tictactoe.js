@@ -80,24 +80,8 @@ async function start() {
     }
 
     spotTaken = false;
-    if (prompt === "1" && values[1] === 1) {
-      values[1] = currentPlayer;
-    } else if (prompt === "2" && values[2] === 2) {
-      values[2] = currentPlayer;
-    } else if (prompt === "3" && values[3] === 3) {
-      values[3] = currentPlayer;
-    } else if (prompt === "4" && values[4] === 4) {
-      values[4] = currentPlayer;
-    } else if (prompt === "5" && values[5] === 5) {
-      values[5] = currentPlayer;
-    } else if (prompt === "6" && values[6] === 6) {
-      values[6] = currentPlayer;
-    } else if (prompt === "7" && values[7] === 7) {
-      values[7] = currentPlayer;
-    } else if (prompt === "8" && values[8] === 8) {
-      values[8] = currentPlayer;
-    } else if (prompt === "9" && values[9] === 9) {
-      values[9] = currentPlayer;
+    if (parseInt(prompt) === values[parseInt(prompt)]) {
+      values[parseInt(prompt)] = currentPlayer;
     } else {
       spotTaken = true;
     }
